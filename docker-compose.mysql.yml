@@ -1,0 +1,39 @@
+# Lucee 5 Container Config:
+lucee5:  
+  container_name: "lucee5"
+  # The location of our core docker directory
+  build: ./workbench/docker
+  # DC build file for this server
+  dockerfile: Dockerfile_Lucee5
+  # bind public port to 8085
+  ports:
+    - "8085:8888"
+  # mount our project root at /var/www ( the default for this server config )
+  volumes:
+    - .:/var/www
+  #link our mysql container
+  links:
+    - mysql:mysqldb
+# MySQL Image Container
+mysql:
+  container_name: "mysql"
+  image: mysql
+  ports:
+    - "3306:3306"
+  volumes:
+    - .:/var/www
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    MYSQL_USER: 'root'
+    MYSQL_DATABASE: coolblog
+  expose:
+    - "3306"
+# Throw-away utility loader container which loads our test databases
+loader:
+  build: ./workbench/docker
+  # DC build file for this server
+  dockerfile: Dockerfile_MySQL_Loader
+  links:
+    - mysql:mysqldb
+  volumes:
+    - .:/var/www
