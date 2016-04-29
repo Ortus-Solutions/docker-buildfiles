@@ -13,11 +13,13 @@ RUN wget -nv $ACF_LIBS_URL -O /opt/ACF11.zip && \
 	unzip ACF11.zip && \
 	rm -rf /opt/ACF11.zip
 
-# Copy the default directories to our new webroot
-# RUN cp -r $CF_HOME/cfusion/wwwroot/CFIDE $WEBROOT/ && \
-#	cp -r $CF_HOME/cfusion/wwwroot/WEB-INF $WEBROOT/
+COPY ACF11/server.xml /opt/ColdFusion/cfusion/runtime/conf/
+
+COPY ACF11/startup.sh /
 
 EXPOSE 8500
 
-CMD ["set","-e"]
-CMD ["coldfusion", "start"]
+RUN chmod 777 /startup.sh
+
+CMD [ "/startup.sh" ]
+
