@@ -21,5 +21,6 @@ EXPOSE 8500
 
 RUN chmod 777 /startup.sh
 
+CMD ["mkdir","/var/www/tests/results/acf11"]
 CMD [ "/startup.sh" ]
 
