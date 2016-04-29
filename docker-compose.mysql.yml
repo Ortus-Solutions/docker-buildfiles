@@ -14,6 +14,23 @@ lucee5:
   #link our mysql container
   links:
     - mysql:mysqldb
+
+# ACF11 Container Config:
+acf11:  
+  # The location of our core docker directory
+  build: ./workbench/docker
+  # DC build file for this server
+  dockerfile: Dockerfile_ACF11
+  # bind public port to 8081
+  ports:
+    - "8081:8500"
+  # mount our project root at /var/www ( the default for this server config )
+  volumes:
+    - .:/var/www
+  #link our mysql container
+  links:
+    - mysql:mysqldb
+
 # MySQL Image Container
 mysql:
   container_name: "mysql"
@@ -28,12 +45,3 @@ mysql:
     MYSQL_DATABASE: coolblog
   expose:
     - "3306"
-# Throw-away utility loader container which loads our test databases
-loader:
-  build: ./workbench/docker
-  # DC build file for this server
-  dockerfile: Dockerfile_MySQL_Loader
-  links:
-    - mysql:mysqldb
-  volumes:
-    - .:/var/www
